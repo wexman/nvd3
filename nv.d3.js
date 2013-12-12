@@ -8133,13 +8133,12 @@ nv.models.multiBarChart = function() {
             .call(legend);
 
         if ( margin.top != legend.height()) {
-          margin.top = legend.height();
           availableHeight = (height || parseInt(container.style('height')) || 400)
-                             - margin.top - margin.bottom;
+                             - margin.top - legend.height() - margin.bottom;
         }
 
         g.select('.nv-legendWrap')
-            .attr('transform', 'translate(' + controlWidth() + ',' + (-margin.top) +')');
+            .attr('transform', 'translate(' + controlWidth() + ',' + (-legend.height()) +')');
       }
 
       //------------------------------------------------------------
@@ -8152,14 +8151,15 @@ nv.models.multiBarChart = function() {
         controls.width(controlWidth()).color(['#444', '#444', '#444']);
         g.select('.nv-controlsWrap')
             .datum(controlsData)
-            .attr('transform', 'translate(0,' + (-margin.top) +')')
+            .attr('transform', 'translate(0,' + (-legend.height()) +')')
             .call(controls);
       }
 
       //------------------------------------------------------------
 
+      var obenOhne = margin.top + legend.height();
 
-      wrap.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+      wrap.attr('transform', 'translate(' + margin.left + ',' + obenOhne + ')');
 
       if (rightAlignYAxis) {
           g.select(".nv-y.nv-axis")
@@ -8330,7 +8330,7 @@ nv.models.multiBarChart = function() {
   //------------------------------------------------------------
 
   multibar.dispatch.on('elementMouseover.tooltip', function(e) {
-    e.pos = [e.pos[0] +  margin.left, e.pos[1] + margin.top];
+    e.pos = [e.pos[0] +  margin.left, e.pos[1] + (margin.top + legend.height())];
     dispatch.tooltipShow(e);
   });
 
